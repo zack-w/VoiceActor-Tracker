@@ -1,0 +1,89 @@
+<div data-ng-controller="RecordController">
+	<div class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a href="./#" class="navbar-brand">AlteredRP - NPC AI Recorder Dashboard</a>
+			</div>
+			<div class="navbar-collapse collapse" id="navbar-main">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#/login" data-ng-hide="userData.authed">Login</a></li>
+					<li><a href="#/logout" data-ng-show="userData.authed">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="alert alert-dismissable alert-info" data-ng-show="uploadSuccess">
+		<button type="button" class="close" data-dismiss="alert" data-ng-click="uploadSuccess = false;">×</button>
+		<strong>Success</strong> Recording was uploaded successfully
+	</div>
+	
+	<h4>Completion Status</h4>
+	<div class="progress progress-striped">
+		<div class="progress-bar progress-bar-info" style="width: {{ completion }}%"></div>
+	</div>
+	
+	<br />
+	
+	<div class="row">
+		<div class="col-md-8">
+			<h4>Phrases</h4>
+			<div class="well bs-component">
+				<table class="table">
+					<thead>
+						<tr>
+							<th style="width: 10%;text-align: center;">Category</th>
+							<th style="width: 65%;">Description</th>
+							<th style="width: 10%;text-align: center;">Recorded?</th>
+							<th style="width: 20%;text-align: center;">Actions</th>
+						</tr>
+					</thead>
+					
+					<tbody data-ng-repeat="(category, pheaseList) in phrases">
+						<tr data-ng-repeat="(phraseID, phrase) in pheaseList">
+							<td style="text-align: center;">
+								<span class="label label-danger" data-ng-show="curRecording == (category + '_' + phraseID)">!</span>
+								<span class="label label-warning">{{ category }}</label>
+							</td>
+							<td>{{ phrase }}</td>
+							<td style="text-align: center;">
+								<span class="label label-success" data-ng-show="user_recordings[ (category + '_' + phraseID) ].Status == 1">Approved</span>
+								<span class="label label-danger" data-ng-show="user_recordings[ (category + '_' + phraseID) ].Status == 0">Pending</span>
+								<span class="label label-primary" data-ng-hide="user_recordings[ (category + '_' + phraseID) ]">No</span>
+							</td>
+							<td style="text-align: center;">
+								<a class="btn btn-info btn-xs" data-ng-click="doPlayback(category + '_' + phraseID);" data-ng-show="user_recordings[ (category + '_' + phraseID) ]">Playback</a>
+								<a class="btn btn-info btn-xs" data-ng-hide="curRecording == (category + '_' + phraseID)" data-ng-click="doRecord( category + '_' + phraseID );">Record</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="col-md-4">
+			<h4>Record</h4>
+			<div class="well bs-component">
+				<div data-ng-hide="curRecording">
+					<b>To record, select a dialogue to the left</b>
+				</div>
+				
+				<div data-ng-show="curRecording">
+					<b>Recording sound:</b> {{ curRecording }}<br /><br />
+					
+					<div id="viz">
+						<canvas id="analyser" width="1024" height="500"></canvas>
+						<canvas id="wavedisplay" width="1024" height="500"></canvas>
+					</div>
+					
+					<br />
+					
+					<a class="btn btn-danger" data-ng-hide="reallyRecording" data-ng-click="startRecording();">Start Recording</a>
+					<a class="btn btn-danger" data-ng-show="reallyRecording" data-ng-click="stopRecording();">Stop Recording</a>
+					<a class="btn btn-danger" data-ng-show="blob != false" data-ng-click="uploadAudio();">Save Recording</a>
+					<a id="save" class="btn btn-danger" data-ng-show="blob != false" data-ng-click="downloadAudio();">Download Recording</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

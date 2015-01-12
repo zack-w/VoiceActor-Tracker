@@ -1,0 +1,38 @@
+<div data-ng-controller="LoginController">
+	<div class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a href="./#" class="navbar-brand">AlteredRP - NPC AI Recorder Dashboard</a>
+			</div>
+			<div class="navbar-collapse collapse" id="navbar-main">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#/login" data-ng-hide="userData.authed">Login</a></li>
+					<li><a href="#/logout" data-ng-show="userData.authed">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="well bs-component" style="width: 400px;margin: 0 auto 0 auto;">
+		<form class="form-horizontal" data-ng-submit="userLogin">
+			<fieldset>
+				<legend><b>Login</b></legend>
+				<div class="form-group">
+					<label for="inputUsername" class="col-lg-3 control-label">Username</label>
+					<div class="col-lg-9">
+						<input type="text" class="form-control" placeholder="Username" data-ng-model="loginUsername" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-lg-3 control-label">Password</label>
+					<div class="col-lg-9">
+						<input type="password" class="form-control" placeholder="Password" data-ng-model="loginPassword"  />
+					</div>
+				</div>
+				
+				<input type="submit" class="btn btn-primary btn-sm" value="Login" data-ng-click="userLogin( loginUsername, loginPassword );" />
+			</fieldset>
+		</form>
+	</div>
+</div>
